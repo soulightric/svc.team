@@ -1,0 +1,31 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\KategoriLayanan;
+
+class KategoriLayananSeeder extends Seeder
+{
+    public function run()
+    {
+        $kategoris = [
+            ['id_layanan' => 'LN0001', 'nama_kategori' => 'Fasilitas Kampus'],
+            ['id_layanan' => 'LN0002', 'nama_kategori' => 'Perpustakaan'],
+            ['id_layanan' => 'LN0003', 'nama_kategori' => 'Laboratorium'],
+            ['id_layanan' => 'LN0004', 'nama_kategori' => 'Administrasi Akademik'],
+            ['id_layanan' => 'LN0005', 'nama_kategori' => 'Keamanan & Kebersihan'],
+            ['id_layanan' => 'LN0006', 'nama_kategori' => 'IT & Sistem Informasi'],
+            ['id_layanan' => 'LN0007', 'nama_kategori' => 'Lainnya'],
+        ];
+
+        foreach ($kategoris as $kategori) {
+            KategoriLayanan::updateOrCreate(
+                ['id_layanan' => $kategori['id_layanan']],
+                $kategori
+            );
+        }
+
+        echo "✅ Kategori Layanan berhasil ditambahkan!\n";
+    }
+}

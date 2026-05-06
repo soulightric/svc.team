@@ -1,0 +1,22 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up()
+    {
+        Schema::table('sessions', function (Blueprint $table) {
+            // Ubah user_id menjadi string agar bisa menyimpan 'AD004'
+            $table->string('user_id')->nullable()->change();
+        });
+    }
+
+    public function down()
+    {
+        Schema::table('sessions', function (Blueprint $table) {
+            $table->bigInteger('user_id')->nullable()->change();
+        });
+    }
+};
