@@ -12,9 +12,9 @@ class FeedbackController extends Controller
 {   
     public function create()
     {
-        $kategoris = KategoriLayanan::all();
-        return view('mahasiswa.feedback.create', compact('kategoris'));
+        $kategoris = \App\Models\KategoriLayanan::all();
         
+        return view('mahasiswa.feedback.create', compact('kategoris'));
     }
 
     public function store(Request $request)
@@ -68,5 +68,13 @@ class FeedbackController extends Controller
 
         return redirect()->route('mahasiswa.dashboard')
                         ->with('success', 'Pengaduan berhasil dikirim! ID: ' . $id_feedback);
+    }
+    public function show($id_feedback)
+    {
+        $feedback = Feedback::with(['kategori', 'lampirans', 'tanggapans.admin'])
+                            ->where('id_mahasiswa', Auth::guard('mahasiswa')->id())
+                            ->findOrFail($id_feedback);
+
+        return view('mahasiswa.feedback.show', compact('feedback'));
     }
 }

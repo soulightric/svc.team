@@ -13,6 +13,8 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
     Route::post('/login', [MahasiswaAuthController::class, 'login']);
     Route::get('/register', [MahasiswaAuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [MahasiswaAuthController::class, 'register']);
+    Route::get('/feedback/{id_feedback}', [App\Http\Controllers\Mahasiswa\FeedbackController::class, 'show'])
+     ->name('feedback.show');
 
     Route::middleware('auth:mahasiswa')->group(function () {
         Route::post('/logout', [MahasiswaAuthController::class, 'logout'])->name('logout');
@@ -31,8 +33,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('auth:admin')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+        
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('dashboard');
+
+        // Feedback Management
+        Route::get('/feedback', [App\Http\Controllers\Admin\FeedbackController::class, 'index'])->name('feedback.index');
+        Route::get('/feedback/{id_feedback}', [App\Http\Controllers\Admin\FeedbackController::class, 'show'])->name('feedback.show');
+        Route::post('/feedback/{id_feedback}/tanggapan', [App\Http\Controllers\Admin\FeedbackController::class, 'storeTanggapan'])->name('feedback.tanggapan.store');
     });
 });
