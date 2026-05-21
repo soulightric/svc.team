@@ -3,40 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Mahasiswa Login</title>
+    <title>Portal Mahasiswa - Admin Login</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2 family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="login_mhs.css">
+    <link rel="stylesheet" href="login admin.css">
     <link rel="icon" href="logoITH.png">
+
 
 </head>
 <body>
 
     <div class="header-section">
         <div class="logo-placeholder">
-            <img src="logoITH.png" alt="Logo ITH" style="width: 70px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
+            <img src="logoITH.png" alt="Logo">
         </div>
-        <h1 class="title">Portal Mahasiswa</h1>
+        <h1 class="title">Portal Admin</h1>
         <p class="subtitle">SVC — Student Voice Campus</p>
     </div>
 
     <div class="login-card">
         <form action="#" method="POST">
             <div class="input-group">
-                <label>NIM</label>
+                <label>USER ADMIN</label>
                 <div class="input-wrapper">
-                    <i class="fa-solid fa-hashtag"></i>
-                    <input type="text" placeholder="Masukkan NIM" required>
+                    <i class="fa-solid fa-hashtag left-icon"></i>
+                    <input type="text" placeholder="Masukkan  Username" required>
                 </div>
             </div>
 
             <div class="input-group">
                 <label>PASSWORD</label>
                 <div class="input-wrapper">
-                    <i class="fa-solid fa-lock"></i>
+                    <i class="fa-solid fa-lock left-icon"></i>
                     <input type="password" placeholder="Masukkan Password" id="password" required>
                     <button type="button" class="btn-toggle-password" onclick="togglePassword()">
                         <i class="fa-solid fa-eye-slash" id="toggleIcon"></i>
@@ -49,20 +50,11 @@
             </button>
         </form>
 
-        <hr class="divider">
-
-        <a href="#" class="back-link">
-            <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
-        </a>
-    </div>
-
-    <div class="footer-link">
-        <i class="fa-regular fa-message"></i>
-        <span>Belum terdaftar? Hubungi admin kampus</span>
+        <a href="#" class="forgot-password">Lupa kata sandi?</a>
     </div>
 
     <script>
-        // Script sederhana untuk fitur 'lihat password' (Eye Icon)
+        // Fitur menyembunyikan/menampilkan kata sandi
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const toggleIcon = document.getElementById('toggleIcon');
