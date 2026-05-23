@@ -1,0 +1,10 @@
+.stat-card {
+    transition: transform 0.3s ease;
+}
+.stat-card:hover {
+    transform: translateY(-8px);
+}
+
+.counter {
+    font-family: 'Georgia', serif;
+}
