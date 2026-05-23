@@ -19,30 +19,7 @@ $ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="shortcut icon" href="/public/favicon.ico" type="image/x-icon">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-        }
-        
-        .hero-bg {
-            background: linear-gradient(135deg, #1e2937 0%, #0f172a 100%);
-        }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-        
-        .stat-card {
-            transition: all 0.3s ease;
-        }
-    </style>
+    <link rel="stylesheet" href="/assets/css/style_main.css">
 </head>
 <body class="bg-gray-50">
     <!-- navigation bar -->
