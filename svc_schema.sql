@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
   UNIQUE KEY `adm_username` (`adm_username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table svc_team.admin: ~5 rows (approximately)
+-- Dumping data for table svc_team.admin: ~4 rows (approximately)
 INSERT INTO `admin` (`adm_username`, `adm_password`, `id_admin`, `created_at`) VALUES
 	('AdminKiki01', 'admin_Ki01', 'AD001', '2026-05-04 13:45:08'),
 	('AdminMisbah02', 'admin_Mi02', 'AD002', '2026-05-04 13:45:53'),

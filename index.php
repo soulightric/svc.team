@@ -1,3 +1,15 @@
+<?php
+session_start();
+require_once 'config.php';
+
+// Ambil statistik keseluruhan
+$total = $pdo->query("SELECT COUNT(*) as total FROM feedback")->fetch()['total'];
+
+$menunggu = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 0")->fetch()['jml'];
+$diterima = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 1")->fetch()['jml'];
+$ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")->fetch()['jml']; // sesuaikan jika status ditolak = 3
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,7 +18,7 @@
     <title>Student Voice Campus</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/public/favicon.ico" type="image/x-icon">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
@@ -71,7 +83,7 @@
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
                 Suara Mahasiswa,<br>
-                <span class="text-emerald-400">Kampus Lebih Baik</span>
+                <span class="text-orange-400">Kampus Lebih Baik</span>
             </h1>
             <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
                 Platform pengaduan dan feedback fasilitas kampus. Setiap masukan Anda akan ditindaklanjuti oleh tim yang berwenang.
@@ -91,42 +103,43 @@
         </div>
     </section>
 
-    <!-- STATS -->
+    <!-- Bagian Stats (Ganti bagian stats lama dengan ini) -->
     <div class="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <!-- Stat 1 -->
+            
+            <!-- Total Aduan -->
             <div class="stat-card bg-white rounded-3xl shadow-xl p-8 text-center card-hover border border-emerald-100">
                 <div class="w-14 h-14 mx-auto bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-4">
                     <i class="fa-solid fa-bullhorn text-3xl"></i>
                 </div>
-                <div class="text-5xl font-bold text-gray-800 mb-1">0</div>
+                <div class="text-5xl font-bold text-gray-800 mb-1"><?= $total ?></div>
                 <div class="text-gray-600 font-medium">Total Aduan</div>
             </div>
             
-            <!-- Stat 2 -->
+            <!-- Menunggu -->
             <div class="stat-card bg-white rounded-3xl shadow-xl p-8 text-center card-hover border border-amber-100">
                 <div class="w-14 h-14 mx-auto bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-4">
                     <i class="fa-solid fa-clock text-3xl"></i>
                 </div>
-                <div class="text-5xl font-bold text-gray-800 mb-1">0</div>
+                <div class="text-5xl font-bold text-gray-800 mb-1"><?= $menunggu ?></div>
                 <div class="text-gray-600 font-medium">Menunggu</div>
             </div>
             
-            <!-- Stat 3 -->
+            <!-- Diterima -->
             <div class="stat-card bg-white rounded-3xl shadow-xl p-8 text-center card-hover border border-cyan-100">
                 <div class="w-14 h-14 mx-auto bg-cyan-100 text-cyan-600 rounded-2xl flex items-center justify-center mb-4">
                     <i class="fa-solid fa-circle-check text-3xl"></i>
                 </div>
-                <div class="text-5xl font-bold text-gray-800 mb-1">0</div>
+                <div class="text-5xl font-bold text-gray-800 mb-1"><?= $diterima ?></div>
                 <div class="text-gray-600 font-medium">Diterima</div>
             </div>
             
-            <!-- Stat 4 -->
+            <!-- Ditolak -->
             <div class="stat-card bg-white rounded-3xl shadow-xl p-8 text-center card-hover border border-rose-100">
                 <div class="w-14 h-14 mx-auto bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mb-4">
                     <i class="fa-solid fa-circle-xmark text-3xl"></i>
                 </div>
-                <div class="text-5xl font-bold text-gray-800 mb-1">0</div>
+                <div class="text-5xl font-bold text-gray-800 mb-1"><?= $ditolak ?></div>
                 <div class="text-gray-600 font-medium">Ditolak</div>
             </div>
         </div>
@@ -230,23 +243,23 @@
     </div>
 
     <script>
-        // Tailwind script already included via CDN
+        Tailwind script already included via CDN
         
-        // function showLoginModal() {
-        //     document.getElementById('loginModal').classList.remove('hidden');
-        //     document.getElementById('loginModal').classList.add('flex');
-        // }
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginModal').classList.add('flex');
+        }
         
-        // function hideLoginModal() {
-        //     const modal = document.getElementById('loginModal');
-        //     modal.classList.add('hidden');
-        //     modal.classList.remove('flex');
-        // }
+        function hideLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
         
-        // function fakeLogin() {
-        //     alert("✅ Login berhasil! (Demo Mode)\n\nAnda akan diarahkan ke dashboard pengaduan.");
-        //     hideLoginModal();
-        // }
+        function fakeLogin() {
+            alert("✅ Login berhasil! (Demo Mode)\n\nAnda akan diarahkan ke dashboard pengaduan.");
+            hideLoginModal();
+        }
         
         // Close modal when clicking outside
         document.getElementById('loginModal').addEventListener('click', function(e) {

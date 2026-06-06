@@ -1,25 +1,37 @@
 <?php
 session_start();
 require_once 'config.php';
+require_once 'auth.php';
+
+$error = '';
+$_SESSION['mahasiswa']['last_activity'] = time();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nim      = trim($_POST['nim']);
-    $password = $_POST['password'];
+    $nim_username = trim($_POST['nim_username']);
+    $password     = trim($_POST['password']);
 
-    $stmt = $pdo->prepare("SELECT * FROM mahasiswa WHERE nim = ?");
-    $stmt->execute([$nim]);
-    $user = $stmt->fetch();
+    if (!empty($nim_username) && !empty($password)) {
+        $stmt = $pdo->prepare("SELECT * FROM mahasiswa 
+                              WHERE (nim = ? OR username = ? OR email = ?) 
+                              LIMIT 1");
+        $stmt->execute([$nim_username, $nim_username, $nim_username]);
+        $mahasiswa = $stmt->fetch();
 
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['mahasiswa'] = [
-            'id'   => $user['id'],
-            'nim'  => $user['nim'],
-            'nama' => $user['nama']
-        ];
-        header("Location: dashboard-mahasiswa.php");
-        exit;
+        if ($mahasiswa && $mahasiswa['password'] === $password) {
+            $_SESSION['mahasiswa'] = [
+                'id_mahasiswa' => $mahasiswa['id_mahasiswa'],
+                'nama'         => $mahasiswa['nama'],
+                'nim'          => $mahasiswa['nim'],
+                'username'     => $mahasiswa['username']
+            ];
+            
+            header("Location: feedback.php");
+            exit;
+        } else {
+            $error = "NIM / Username atau Password salah!";
+        }
     } else {
-        $error = "NIM atau password salah!";
+        $error = "Mohon isi NIM dan Password!";
     }
 }
 ?>
@@ -29,38 +41,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Mahasiswa</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+    <title>Portal Mahasiswa - SVC</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/login_mhs.css">
+    <link rel="shortcut icon" href="/public/favicon.ico" type="image/x-icon">
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center">
-    <div class="max-w-md w-full mx-4">
-        <div class="bg-white rounded-3xl shadow-xl p-8">
-            <h2 class="text-3xl font-bold text-center mb-8">Login Mahasiswa</h2>
-            
-            <?php if (isset($error)): ?>
-                <div class="bg-red-100 text-red-700 p-4 rounded-2xl mb-6 text-center">
-                    <?= $error ?>
-                </div>
-            <?php endif; ?>
+<body>
 
-            <form method="POST" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-medium mb-2">NIM</label>
-                    <input type="text" name="nim" required
-                           class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-emerald-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Password</label>
-                    <input type="password" name="password" required
-                           class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-emerald-500">
-                </div>
-                <button type="submit"
-                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-4 rounded-2xl transition">
-                    MASUK
-                </button>
-            </form>
+    <div class="header-section">
+        <div class="logo-placeholder">
+            <img src="/assets/logo.png" alt="Logo ITH">
         </div>
+        <h1 class="title">Portal Mahasiswa</h1>
+        <p class="subtitle">SVC — Student Voice Campus</p>
     </div>
+
+    <div class="login-card">
+        <?php if ($error): ?>
+            <div class="error-message">
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="" method="POST">
+            <div class="input-group">
+                <label>NIM / Username</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-hashtag"></i>
+                    <input type="text" name="nim_username" 
+                           placeholder="Masukkan NIM atau Username" 
+                           value="<?= isset($_POST['nim_username']) ? htmlspecialchars($_POST['nim_username']) : '' ?>" 
+                           required autofocus>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>PASSWORD</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="password" id="password" 
+                           placeholder="Masukkan Password" required>
+                    <button type="button" class="btn-toggle-password" onclick="togglePassword()">
+                        <i class="fa-solid fa-eye-slash" id="toggleIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login">
+                Login <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+        </form>
+
+        <hr class="divider">
+
+        <a href="../index.php" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
+        </a>
+    </div>
+
+    <div class="footer-link">
+        <i class="fa-regular fa-message"></i>
+        <span>Belum terdaftar? Hubungi admin kampus</span>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
 </body>
 </html>
