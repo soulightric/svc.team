@@ -14,13 +14,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$username]);
         $admin = $stmt->fetch();
 
-        if ($admin && $admin['adm_password'] === $password) {
+        $passwordOk = false;
+        if (password_verify($password, $admin['adm_password'])) {
+            $passwordOk = true;
+        } elseif ($admin['adm_password'] === $password) {
+            $passwordOk = true; // backward compatibility
+        }
+
+        if ($passwordOk) {
             $_SESSION['admin'] = [
                 'id_admin'   => $admin['id_admin'],
                 'username'   => $admin['adm_username'],
-                'nama_admin' => $admin['adm_username']
+                'nama_admin' => $admin['adm_username'],
+                'role'       => $admin['role'] ?? 'admin'   // ← TAMBAHKAN INI
             ];
-            
             header("Location: dashboard.php");
             exit;
         } else {

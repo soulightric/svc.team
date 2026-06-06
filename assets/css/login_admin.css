@@ -5,25 +5,26 @@
 }
 
 body {
-    background-color: #0f1623;
-    color: #ffffff;
     font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, #0d1520 0%, #101926 60%, #3e3020 100%);
+    color: #ffffff;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 1.5rem 1rem;     /* Space sama rata atas-bawah, kiri-kanan */
 }
 
 .header-section {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .logo-placeholder {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1rem;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 0.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -32,55 +33,54 @@ body {
 .logo-placeholder img {
     max-width: 100%;
     height: auto;
-    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.4));
 }
 
 .title {
     font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
+    font-size: 1.95rem;
     font-weight: 500;
     letter-spacing: 0.5px;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.2rem;
 }
 
 .subtitle {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #8b9bb4;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .login-card {
-    background-color: #0f1623;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 24px;
-    padding: 3rem 4rem;
+    background-color: #121b29;
+    border: 1px solid #2e3c50;
+    border-radius: 2px;
+    padding: 1.75rem 2rem;
     width: 100%;
-    max-width: 580px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.05);
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
 }
 
 .input-group {
-    margin-bottom: 1.8rem;
+    margin-bottom: 1.25rem;
 }
 
 .input-group label {
     display: block;
-    font-family: 'Playfair Display', serif;
-    font-size: 0.9rem;
-    color: #e2e8f0;
-    margin-bottom: 0.8rem;
+    font-size: 0.75rem;
+    color: #8b9bb4;
+    margin-bottom: 0.6rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
-    background-color: #121927;
-    border: 1px solid #4a5a75;
-    border-radius: 12px;
-    padding: 0 1.2rem;
+    background-color: #0b111a;
+    border: 1px solid #2e3c50;
+    border-radius: 2px;
+    padding: 0 1rem;
     transition: all 0.3s ease;
 }
 
@@ -90,7 +90,7 @@ body {
 
 .input-wrapper i.left-icon {
     color: #4b5a73;
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-right: 10px;
 }
 
@@ -98,24 +98,27 @@ body {
     background: transparent;
     border: none;
     color: #e2e8f0;
-    padding: 1.2rem 0.5rem;
+    padding: 1rem 0.8rem;
     width: 100%;
-    font-size: 1.1rem;
-    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
     outline: none;
 }
 
 .input-wrapper input::placeholder {
-    color: #64748b;
+    color: #3f4b5f;
+    font-weight: 500;
 }
 
 .btn-toggle-password {
     background: transparent;
     border: none;
-    color: #64748b;
+    color: #e2e8f0;
     cursor: pointer;
     outline: none;
-    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-login {
@@ -123,19 +126,18 @@ body {
     background-color: #119e86;
     color: #ffffff;
     border: none;
-    border-radius: 50px;
-    padding: 1rem;
-    font-size: 1.2rem;
-    font-weight: 500;
-    font-family: 'Inter', sans-serif;
+    border-radius: 2px;
+    padding: 0.85rem;
+    font-size: 1.1rem;
+    font-weight: 600;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin-top: 2rem;
-    margin-bottom: 2.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .btn-login:hover {
@@ -159,10 +161,11 @@ body {
 .error-message {
     background: #f87171;
     color: white;
-    padding: 12px 16px;
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
+    padding: 10px 14px;
+    border-radius: 2px;
+    margin-bottom: 1.25rem;
     text-align: center;
+    font-size: 0.9rem;
 }
 
 .divider {
@@ -190,9 +193,14 @@ body {
     color: #ffffff;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 550px) {
     .login-card {
-        padding: 2.5rem 2rem;
-        width: 90%;
+        padding: 1.5rem 1.5rem;
+        width: 94%;
+        max-width: 380px;
+    }
+    
+    .title {
+        font-size: 1.7rem;
     }
 }

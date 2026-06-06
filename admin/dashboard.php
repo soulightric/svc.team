@@ -69,12 +69,12 @@ $stats = [
 <body class="bg-gray-50">
 
 <!-- HEADER -->
-<header class="bg-[#0f1b2d] text-white py-5">
+<header class="bg-[#0f1b2d] text-white py-2">
     <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <div class="flex items-center gap-3">
-            <img src="/assets/logo.png" alt="ITH" class="h-10">
+            <img src="/assets/logo.png" alt="ITH" class="h-8">
             <div>
-                <h1 class="text-2xl font-bold">SVC Admin</h1>
+                <h1 class="text-1xl font-bold">SVC Admin</h1>
                 <p class="text-teal-400 text-xs">Student Voice Campus</p>
             </div>
         </div>
@@ -83,7 +83,20 @@ $stats = [
                 <p class="font-medium"><?= htmlspecialchars($admin['nama_admin'] ?? $admin['username']) ?></p>
                 <p class="text-xs text-slate-400">Administrator</p>
             </div>
-            <a href="../logout.php" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-sm">Logout</a>
+            <a href="../logout.php" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-sm">Logout</a>
+            <?php if (($_SESSION['admin']['role'] ?? 'admin') === 'super_admin'): ?>
+                <a href="kelola_admin.php" 
+                class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-users-cog"></i>
+                    <span>Kelola Admin</span>
+                </a>
+            <?php endif; ?>
+
+            <a href="ganti_password.php" 
+            class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded text-sm flex items-center gap-2">
+                <i class="fa-solid fa-key"></i>
+                <span>Ganti Password</span>
+            </a>
         </div>
     </div>
 </header>
@@ -92,9 +105,9 @@ $stats = [
 
     <!-- STATISTIK -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-        <div class="bg-white rounded-3xl p-6 shadow card-hover">
+        <div class="bg-white rounded p-6 shadow card-hover">
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600">
+                <div class="w-12 h-12 bg-blue-100 rounded flex items-center justify-center text-blue-600">
                     <i class="fa-solid fa-bullhorn text-2xl"></i>
                 </div>
                 <div>
@@ -103,9 +116,9 @@ $stats = [
                 </div>
             </div>
         </div>
-        <div class="bg-white rounded-3xl p-6 shadow card-hover">
+        <div class="bg-white rounded p-6 shadow card-hover">
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600">
+                <div class="w-12 h-12 bg-amber-100 rounded flex items-center justify-center text-amber-600">
                     <i class="fa-solid fa-clock text-2xl"></i>
                 </div>
                 <div>
@@ -114,9 +127,9 @@ $stats = [
                 </div>
             </div>
         </div>
-        <div class="bg-white rounded-3xl p-6 shadow card-hover">
+        <div class="bg-white rounded p-6 shadow card-hover">
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600">
+                <div class="w-12 h-12 bg-emerald-100 rounded flex items-center justify-center text-emerald-600">
                     <i class="fa-solid fa-circle-check text-2xl"></i>
                 </div>
                 <div>
@@ -125,9 +138,9 @@ $stats = [
                 </div>
             </div>
         </div>
-        <div class="bg-white rounded-3xl p-6 shadow card-hover">
+        <div class="bg-white rounded p-6 shadow card-hover">
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-red-100 rounded-2xl flex items-center justify-center text-red-600">
+                <div class="w-12 h-12 bg-red-100 rounded flex items-center justify-center text-red-600">
                     <i class="fa-solid fa-circle-xmark text-2xl"></i>
                 </div>
                 <div>
@@ -139,7 +152,7 @@ $stats = [
     </div>
 
     <!-- DAFTAR ADUAN -->
-    <div class="bg-white rounded-3xl shadow">
+    <div class="bg-white rounded shadow">
         <div class="px-6 py-5 border-b flex justify-between items-center">
             <h2 class="text-xl font-semibold">Daftar Semua Aduan</h2>
             <span class="text-sm text-slate-500"><?= count($feedbacks) ?> aduan</span>
@@ -169,7 +182,7 @@ $stats = [
                         <td class="px-6 py-4 text-sm"><?= htmlspecialchars($fb['nama_kategori'] ?? '-') ?></td>
                         <td class="px-6 py-4"><?= htmlspecialchars($fb['judul_feedback']) ?></td>
                         <td class="px-6 py-4">
-                            <span class="px-3 py-1 text-xs rounded-full 
+                            <span class="px-3 py-1 text-xs rounded 
                                 <?= $fb['status'] == 0 ? 'bg-yellow-100 text-yellow-700' : 
                                    ($fb['status'] == 1 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700') ?>">
                                 <?= $fb['status'] == 0 ? 'Menunggu' : ($fb['status'] == 1 ? 'Diterima' : 'Ditolak') ?>
@@ -178,7 +191,7 @@ $stats = [
                         <td class="px-6 py-4 text-sm text-slate-500"><?= date('d M Y', strtotime($fb['created_at'])) ?></td>
                         <td class="px-6 py-4 text-center">
                             <button onclick="showResponseModal('<?= $fb['id_feedback'] ?>', '<?= htmlspecialchars($fb['judul_feedback']) ?>')" 
-                                    class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl text-sm">
+                                    class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-sm">
                                 Beri Tanggapan
                             </button>
                         </td>
@@ -192,7 +205,7 @@ $stats = [
 
 <!-- RESPONSE MODAL -->
 <div id="responseModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-white rounded-3xl max-w-lg w-full mx-4">
+    <div class="bg-white rounded max-w-lg w-full mx-4">
         <div class="p-6 border-b">
             <h3 class="font-semibold text-lg">Beri Tanggapan</h3>
             <p id="modalJudul" class="text-sm text-slate-500 mt-1"></p>
@@ -202,7 +215,7 @@ $stats = [
             
             <div>
                 <label class="block text-sm font-medium mb-2">Status</label>
-                <select name="status" class="w-full px-4 py-3 border rounded-2xl" required>
+                <select name="status" class="w-full px-4 py-3 border rounded" required>
                     <option value="0">Menunggu</option>
                     <option value="1">Diterima & Diproses</option>
                     <option value="3">Ditolak</option>
@@ -211,15 +224,15 @@ $stats = [
 
             <div>
                 <label class="block text-sm font-medium mb-2">Isi Tanggapan</label>
-                <textarea name="isi_tanggapan" rows="5" class="w-full px-4 py-3 border rounded-2xl" 
+                <textarea name="isi_tanggapan" rows="5" class="w-full px-4 py-3 border rounded" 
                           placeholder="Jelaskan tindak lanjut atau alasan penolakan..."></textarea>
             </div>
 
             <div class="flex gap-3 pt-4">
                 <button type="button" onclick="hideModal()" 
-                        class="flex-1 py-3 border rounded-2xl font-medium">Batal</button>
+                        class="flex-1 py-3 border rounded font-medium">Batal</button>
                 <button type="submit" 
-                        class="flex-1 py-3 bg-teal-600 text-white rounded-2xl font-semibold">Simpan Tanggapan</button>
+                        class="flex-1 py-3 bg-teal-600 text-white rounded font-semibold">Simpan Tanggapan</button>
             </div>
         </form>
     </div>

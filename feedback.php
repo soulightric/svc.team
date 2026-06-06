@@ -85,12 +85,12 @@ $feedbacks = $stmt->fetchAll();
 <body class="bg-[#f8f7f4] min-h-screen">
 
 <!-- HEADER -->
-<header class="bg-[#0f1b2d] text-white py-6">
-    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+<header class="bg-[#0f1b2d] text-white py-2">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <div class="flex items-center gap-3">
-            <img src="/assets/logo.png" alt="ITH" class="h-11">
+            <img src="/assets/logo.png" alt="ITH" class="h-8">
             <div>
-                <h1 class="text-3xl font-bold">SVC</h1>
+                <h1 class="text-1xl font-bold">SVC</h1>
                 <p class="text-teal-400 text-sm">Student Voice Campus</p>
             </div>
         </div>
@@ -99,25 +99,25 @@ $feedbacks = $stmt->fetchAll();
                 <p class="font-medium"><?= htmlspecialchars($user['nama']) ?></p>
                 <p class="text-xs text-slate-400"><?= $user['nim'] ?></p>
             </div>
-            <a href="logout.php" class="px-5 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-sm">Logout</a>
+            <a href="logout.php" class="px-5 py-2 bg-red-600 hover:bg-red-700 rounded text-sm">Logout</a>
         </div>
     </div>
 </header>
 
-<div class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
+<div class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
 
     <!-- FORM KIRIM ADUAN -->
     <div class="lg:col-span-2">
-        <div class="bg-white rounded-3xl p-7 shadow sticky top-6">
+        <div class="bg-white rounded p-7 shadow sticky top-6">
             <h2 class="text-2xl font-semibold mb-2">Buat Aduan Baru</h2>
             <p class="text-slate-500 mb-6">Suara Anda akan terlihat oleh semua mahasiswa</p>
 
             <?php if ($success): ?>
-                <div class="bg-emerald-100 text-emerald-700 p-4 rounded-2xl mb-6">✅ Aduan berhasil dikirim!</div>
+                <div class="bg-emerald-100 text-emerald-700 p-4 rounded mb-6">✅ Aduan berhasil dikirim!</div>
             <?php endif; ?>
 
             <?php if ($error): ?>
-                <div class="bg-red-100 text-red-700 p-4 rounded-2xl mb-6"><?= htmlspecialchars($error) ?></div>
+                <div class="bg-red-100 text-red-700 p-4 rounded mb-6"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
             <form method="POST">
@@ -125,7 +125,7 @@ $feedbacks = $stmt->fetchAll();
 
                 <div class="mb-5">
                     <label class="block text-sm font-medium mb-2">Kategori Layanan</label>
-                    <select name="id_layanan" required class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:border-teal-500">
+                    <select name="id_layanan" required class="w-full px-4 py-3 border rounded focus:outline-none focus:border-teal-500">
                         <option value="">-- Pilih Kategori --</option>
                         <?php
                         $kat = $pdo->query("SELECT * FROM kategori_layanan ORDER BY nama_kategori");
@@ -139,18 +139,18 @@ $feedbacks = $stmt->fetchAll();
                 <div class="mb-5">
                     <label class="block text-sm font-medium mb-2">Judul Aduan</label>
                     <input type="text" name="judul" maxlength="100" required
-                           class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:border-teal-500"
+                           class="w-full px-4 py-3 border rounded focus:outline-none focus:border-teal-500"
                            placeholder="Ringkasan masalah...">
                 </div>
 
                 <div class="mb-6">
                     <label class="block text-sm font-medium mb-2">Deskripsi Lengkap</label>
                     <textarea name="deskripsi" rows="6" required
-                              class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:border-teal-500"
+                              class="w-full px-4 py-3 border rounded focus:outline-none focus:border-teal-500"
                               placeholder="Jelaskan secara detail..."></textarea>
                 </div>
 
-                <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 rounded-2xl">
+                <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 rounded">
                     Kirim Aduan
                 </button>
             </form>
@@ -162,13 +162,13 @@ $feedbacks = $stmt->fetchAll();
         <h2 class="text-2xl font-semibold mb-6">Semua Aduan Mahasiswa (<?= count($feedbacks) ?>)</h2>
 
         <?php if (empty($feedbacks)): ?>
-            <div class="bg-white rounded-3xl p-16 text-center text-slate-400">
+            <div class="bg-white rounded p-16 text-center text-slate-400">
                 Belum ada aduan yang dibuat.
             </div>
         <?php else: ?>
             <div class="space-y-5">
                 <?php foreach ($feedbacks as $fb): ?>
-                    <div class="bg-white rounded-3xl p-6 shadow-sm card-hover">
+                    <div class="bg-white rounded p-6 shadow-sm card-hover">
                         <div class="flex justify-between items-start">
                             <div>
                                 <span class="px-3 py-1 text-xs font-medium rounded-full 

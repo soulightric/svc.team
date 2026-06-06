@@ -27,4 +27,15 @@ function checkAdminLogin() {
     }
     return $_SESSION['admin'];
 }
+function isSuperAdmin() {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    return isset($_SESSION['admin']['role']) && $_SESSION['admin']['role'] === 'super_admin';
+}
+
+function requireSuperAdmin() {
+    if (!isSuperAdmin()) {
+        header("Location: dashboard.php?error=akses_ditolak");
+        exit;
+    }
+}
 ?>

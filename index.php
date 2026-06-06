@@ -4,10 +4,9 @@ require_once 'config.php';
 
 // Ambil statistik keseluruhan
 $total = $pdo->query("SELECT COUNT(*) as total FROM feedback")->fetch()['total'];
-
 $menunggu = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 0")->fetch()['jml'];
 $diterima = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 1")->fetch()['jml'];
-$ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")->fetch()['jml']; // sesuaikan jika status ditolak = 3
+$ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")->fetch()['jml'];
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +26,37 @@ $ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")
         }
         
         .hero-bg {
-            background: linear-gradient(135deg, #1e2937 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .hero-slider img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .hero-slider img.active {
+            opacity: 0.25;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
         
         .card-hover {
@@ -35,42 +64,38 @@ $ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")
         }
         
         .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 15px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
         
         .stat-card {
             transition: all 0.3s ease;
         }
+        
+        .rounded-custom {
+            border-radius: 12px;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- navigation bar -->
+
+    <!-- Navigation -->
     <header class="bg-[#0f172a] text-white sticky top-0 z-50 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <!-- logo kampus -->
+        <div class="max-w-7xl mx-auto px-4 py-1 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-3">
-                    <img id="campus-logo" 
-                         src="assets/logo.png" 
-                         alt="Logo Kampus" 
-                         class="h-12 w-auto object-contain">
-                    
-                    <div class="hidden sm:block h-8 w-px bg-white/30"></div>
+                    <img src="assets/logo.png" alt="Logo Kampus" class="h-8 w-auto object-contain">
+                    <div class="hidden sm:block h-5 w-px bg-white/30"></div>
                 </div>
-                <!-- logo sistem -->
-                <div class="flex items-center gap-3">
-                    <div>
-                        <span class="text-2xl tracking-tight text-emerald-400">Portal Resmi</span><br>
-                        <span class="text-2xl tracking-tight">SVC</span>
-                    </div>
+                <div>
+                    <span class="tracking-tight text-emerald-400">Portal Resmi</span><br>
+                    <span class="tracking-tight">SVC</span>
                 </div>
             </div>
 
-            <!-- Right Side -->
-            <div class="flex items-center gap-4">           
+            <div class="flex items-center gap-2">
                 <a href="/admin/login.php" 
-                   class="px-5 py-2 bg-white/10 hover:bg-white/20 border border-white/30 rounded-2xl text-sm font-medium transition-all hidden md:flex items-center gap-2">
+                   class="px-5 py-2 bg-white/10 hover:bg-white/20 border border-white/30 rounded text-sm font-medium transition-all hidden md:flex items-center gap-2">
                     <i class="fa-solid fa-user-shield"></i>
                     <span>Admin</span>
                 </a>
@@ -78,65 +103,67 @@ $ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")
         </div>
     </header>
 
-    <!-- HERO -->
-    <section class="hero-bg text-white py-20">
-        <div class="max-w-4xl mx-auto px-4 text-center">
+    <!-- HERO SECTION -->
+    <section class="hero-bg text-white py-20 md:py-24">
+        <!-- Background Image Slider -->
+        <div class="hero-slider" id="heroSlider">
+            <!-- Gambar akan di-inject via JavaScript -->
+        </div>
+
+        <!-- Overlay gelap agar teks lebih jelas -->
+        <div class="absolute inset-0 bg-black/50 z-[1]"></div>
+
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10 hero-content">
             <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
                 Suara Mahasiswa,<br>
                 <span class="text-orange-400">Kampus Lebih Baik</span>
             </h1>
-            <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
+            <p class="text-xl text-gray-200 max-w-2xl mx-auto mb-10">
                 Platform pengaduan dan feedback fasilitas kampus. Setiap masukan Anda akan ditindaklanjuti oleh tim yang berwenang.
             </p>
             
-            <button>
-                <a href="login.php" 
-                class="bg-emerald-500 hover:bg-emerald-600 transition-all text-white text-xl font-semibold px-10 py-5 rounded-3xl flex items-center gap-3 mx-auto group">
+            <a href="login.php" 
+               class="inline-flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 transition-all text-white text-xl font-semibold px-10 py-5 rounded gap-3 group">
                 Login & Kirim Aduan
                 <i class="fa-solid fa-arrow-right group-active:translate-x-1 transition-transform"></i>
             </a>
-            </button>
             
-            <p class="text-sm text-gray-400 mt-6">
+            <p class="text-sm text-gray-300 mt-6">
                 Khusus mahasiswa terdaftar — gunakan NIM dan password Anda
             </p>
         </div>
     </section>
 
-    <!-- Bagian Stats (Ganti bagian stats lama dengan ini) -->
+    <!-- STATISTIK -->
     <div class="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             
-            <!-- Total Aduan -->
-            <div class="stat-card bg-white rounded-3xl shadow-xl p-8 text-center card-hover border border-emerald-100">
-                <div class="w-14 h-14 mx-auto bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-4">
+            <div class="stat-card bg-white rounded shadow-xl p-8 text-center card-hover border border-emerald-100">
+                <div class="w-14 h-14 mx-auto bg-emerald-100 text-emerald-600 rounded flex items-center justify-center mb-4">
                     <i class="fa-solid fa-bullhorn text-3xl"></i>
                 </div>
                 <div class="text-5xl font-bold text-gray-800 mb-1"><?= $total ?></div>
                 <div class="text-gray-600 font-medium">Total Aduan</div>
             </div>
             
-            <!-- Menunggu -->
-            <div class="stat-card bg-white rounded-3xl shadow-xl p-8 text-center card-hover border border-amber-100">
-                <div class="w-14 h-14 mx-auto bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-4">
+            <div class="stat-card bg-white rounded shadow-xl p-8 text-center card-hover border border-amber-100">
+                <div class="w-14 h-14 mx-auto bg-amber-100 text-amber-600 rounded flex items-center justify-center mb-4">
                     <i class="fa-solid fa-clock text-3xl"></i>
                 </div>
                 <div class="text-5xl font-bold text-gray-800 mb-1"><?= $menunggu ?></div>
                 <div class="text-gray-600 font-medium">Menunggu</div>
             </div>
             
-            <!-- Diterima -->
-            <div class="stat-card bg-white rounded-3xl shadow-xl p-8 text-center card-hover border border-cyan-100">
-                <div class="w-14 h-14 mx-auto bg-cyan-100 text-cyan-600 rounded-2xl flex items-center justify-center mb-4">
+            <div class="stat-card bg-white rounded shadow-xl p-8 text-center card-hover border border-cyan-100">
+                <div class="w-14 h-14 mx-auto bg-cyan-100 text-cyan-600 rounded flex items-center justify-center mb-4">
                     <i class="fa-solid fa-circle-check text-3xl"></i>
                 </div>
                 <div class="text-5xl font-bold text-gray-800 mb-1"><?= $diterima ?></div>
                 <div class="text-gray-600 font-medium">Diterima</div>
             </div>
             
-            <!-- Ditolak -->
-            <div class="stat-card bg-white rounded-3xl shadow-xl p-8 text-center card-hover border border-rose-100">
-                <div class="w-14 h-14 mx-auto bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mb-4">
+            <div class="stat-card bg-white rounded shadow-xl p-8 text-center card-hover border border-rose-100">
+                <div class="w-14 h-14 mx-auto bg-rose-100 text-rose-600 rounded flex items-center justify-center mb-4">
                     <i class="fa-solid fa-circle-xmark text-3xl"></i>
                 </div>
                 <div class="text-5xl font-bold text-gray-800 mb-1"><?= $ditolak ?></div>
@@ -153,27 +180,24 @@ $ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")
         </div>
         
         <div class="grid md:grid-cols-3 gap-8">
-            <!-- Step 1 -->
-            <div class="bg-white rounded-3xl p-8 card-hover shadow-lg">
-                <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 text-emerald-700 rounded-2xl font-bold text-2xl mb-6">01</div>
+            <div class="bg-white rounded p-8 card-hover shadow-lg">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 text-emerald-700 rounded font-bold text-2xl mb-6">01</div>
                 <h3 class="text-2xl font-semibold mb-3">Login</h3>
                 <p class="text-gray-600 leading-relaxed">
                     Masuk menggunakan NIM dan password yang telah didaftarkan oleh admin kampus.
                 </p>
             </div>
             
-            <!-- Step 2 -->
-            <div class="bg-white rounded-3xl p-8 card-hover shadow-lg">
-                <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 text-emerald-700 rounded-2xl font-bold text-2xl mb-6">02</div>
+            <div class="bg-white rounded p-8 card-hover shadow-lg">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 text-emerald-700 rounded font-bold text-2xl mb-6">02</div>
                 <h3 class="text-2xl font-semibold mb-3">Kirim Aduan</h3>
                 <p class="text-gray-600 leading-relaxed">
                     Pilih kategori fasilitas, jelaskan masalah secara detail agar mudah ditindaklanjuti.
                 </p>
             </div>
             
-            <!-- Step 3 -->
-            <div class="bg-white rounded-3xl p-8 card-hover shadow-lg">
-                <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 text-emerald-700 rounded-2xl font-bold text-2xl mb-6">03</div>
+            <div class="bg-white rounded p-8 card-hover shadow-lg">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 text-emerald-700 rounded font-bold text-2xl mb-6">03</div>
                 <h3 class="text-2xl font-semibold mb-3">Pantau Status</h3>
                 <p class="text-gray-600 leading-relaxed">
                     Lihat status aduan Anda: menunggu, diterima, ditolak beserta balasan resmi.
@@ -192,11 +216,11 @@ $ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")
             <p class="text-emerald-100/80 text-lg mb-10">
                 Login sekarang dan bantu kami tingkatkan kualitas fasilitas kampus
             </p>
-            <button onclick="showLoginModal()" 
-                    class="bg-emerald-500 hover:bg-emerald-600 text-white text-xl font-semibold px-12 py-6 rounded-3xl inline-flex items-center gap-3 transition-all">
+            <a href="login.php" 
+               class="inline-flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 text-white text-xl font-semibold px-12 py-5 rounded gap-3 transition-all">
+                Masuk Sekarang
                 <i class="fa-solid fa-arrow-right"></i>
-                <span>Masuk Sekarang</span>
-            </button>
+            </a>
         </div>
     </section>
 
@@ -208,72 +232,51 @@ $ditolak  = $pdo->query("SELECT COUNT(*) as jml FROM feedback WHERE status = 3")
         </div>
     </footer>
 
-    <!-- LOGIN MODAL -->
-    <div id="loginModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-3xl max-w-md w-full mx-4 overflow-hidden">
-            <div class="px-8 py-6 border-b flex justify-between items-center">
-                <h3 class="text-2xl font-semibold">Login Mahasiswa</h3>
-                <button onclick="hideLoginModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fa-solid fa-xmark text-2xl"></i>
-                </button>
-            </div>
-            
-            <div class="p-8 space-y-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">NIM</label>
-                    <input type="text" placeholder="Contoh: 2023123456" 
-                           class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-emerald-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                    <input type="password" placeholder="Masukkan password" 
-                           class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-emerald-500">
-                </div>
-                
-                <button onclick="fakeLogin()" 
-                        class="w-full bg-emerald-600 hover:bg-emerald-700 py-4 rounded-2xl text-white font-semibold text-lg transition-colors">
-                    Masuk
-                </button>
-                
-                <div class="text-center text-sm text-gray-500">
-                    Belum terdaftar? Hubungi admin kampus Anda
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        Tailwind script already included via CDN
+        // ==================== HERO IMAGE SLIDER ====================
+        const heroImages = [
+            'https://ith.ac.id/public/carouselImg/2024-11-22T01-02-08-093Z.jpeg', // kampus / gedung
+            'https://ith.ac.id/public/carouselImg/2025-02-07T14-32-15-837Z.JPG', // mahasiswa
+            'https://ith.ac.id/public/carouselImg/2024-11-22T00-56-59-919Z.jpeg', // ruang kelas
+            'https://ith.ac.id/public/carouselImg/2024-11-22T01-00-23-481Z.jpeg'  // perpustakaan / kampus
+        ];
+
+        const sliderContainer = document.getElementById('heroSlider');
         
-        function showLoginModal() {
-            document.getElementById('loginModal').classList.remove('hidden');
-            document.getElementById('loginModal').classList.add('flex');
+        // Buat elemen gambar
+        heroImages.forEach((src, index) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = `Hero image ${index + 1}`;
+            if (index === 0) img.classList.add('active');
+            sliderContainer.appendChild(img);
+        });
+
+        let currentSlide = 0;
+        const slides = sliderContainer.querySelectorAll('img');
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
         }
-        
-        function hideLoginModal() {
-            const modal = document.getElementById('loginModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
         }
-        
-        function fakeLogin() {
-            alert("✅ Login berhasil! (Demo Mode)\n\nAnda akan diarahkan ke dashboard pengaduan.");
-            hideLoginModal();
-        }
-        
-        // Close modal when clicking outside
-        document.getElementById('loginModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideLoginModal();
-            }
+
+        // Auto slide setiap 5 detik
+        setInterval(nextSlide, 5000);
+
+        // Optional: Pause slider saat hover (opsional, bisa dihapus)
+        sliderContainer.addEventListener('mouseenter', () => {
+            clearInterval(window.heroInterval);
         });
         
-        // Keyboard escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === "Escape") {
-                hideLoginModal();
-            }
+        sliderContainer.addEventListener('mouseleave', () => {
+            window.heroInterval = setInterval(nextSlide, 5000);
         });
     </script>
+
 </body>
 </html>
